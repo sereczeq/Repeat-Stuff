@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         if (!inGame && worldScrollingSpeed != 0)
         {
 			savedSpeed = worldScrollingSpeed;

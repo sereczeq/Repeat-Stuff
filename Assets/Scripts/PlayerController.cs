@@ -29,7 +29,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!GameManager.instance.inGame) return;
 
-        Debug.Log("Klatka");
         if (jumped && transform.position.y <= startingY)
         {
             jumped = doubleJumped = false;
@@ -58,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     //Metoda zostanie automatycznie wywołana w momencie zderzenia z jakimkolwiek
     //colliderem na którym ustawione jest pole IsTrigger
+
     void OnTriggerEnter2D(Collider2D other)
     {
         //sprawdzamy czy zderzyliśmy się z przeszkodą
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
             PlayerDeath();
         }
     }
-
     void PlayerDeath()
     {
         //Zamrażamy fizykę gracza (pozostanie on wtedy w miejscu w którym przegrał

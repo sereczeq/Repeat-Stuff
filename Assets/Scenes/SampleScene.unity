@@ -840,6 +840,8 @@ MonoBehaviour:
   startingY: 0
   groundCheck: {fileID: 294437067}
   grounded: 0
+  "dotkn\u0105\u0142emCzego\u015B": 0
+  "dotkn\u0105\u0142emObstacle": 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,7 +2049,7 @@ MonoBehaviour:
   maxObstacleSpawnHeight: -4
   minObstacleSpawnHeight: 4
   obstacleSpawnPositionX: 4
-  inGame: 0
+  inGame: 1
   resetButton: {fileID: 758200102}
 --- !u!4 &1118391180
 Transform:

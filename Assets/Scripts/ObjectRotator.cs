@@ -17,6 +17,3 @@ public class ObjectRotator : MonoBehaviour
 		transform.Rotate(new Vector3(0f, 0f, rotationSpeed));
 	}
 }
-
-// GameObject
-// gameObject
