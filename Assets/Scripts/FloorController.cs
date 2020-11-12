@@ -25,7 +25,7 @@ public class FloorController : MonoBehaviour
 		if (floorTile2.transform.position.x < 0f)
 		{
 			//przesuwam lewy kafelek w prawo o 20 jednostek (czyli 2 jego szerokości)
-			floorTile1.transform.position += new Vector3(20f, 0f, 0f);
+			floorTile1.transform.position += new Vector3(30.42f, 0f, 0f);
 
 			//Zamieniam zmienne
 			var tmp = floorTile1;
