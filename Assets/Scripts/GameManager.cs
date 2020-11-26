@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,12 +35,38 @@ public class GameManager : MonoBehaviour
 	//pole do podpięcia przycisku reset
 	public GameObject resetButton;
 
+	//coin zmienne
+	//Pole na ilość coinów
+	private int coins;
+	//wyświetlanie ilości coinsów w grze
+	public Text coinScoreText;
+
+	//immortality zmienne
+	public bool isImmortal = false;
+	public float immortalTime = 5f;
+	public float immortalSpeedBoost = 2f;
+
+	//magnet zmienne
+	//czy gracz posiada magnes
+	public bool isMagnetActive = false;
+	//prędkość przyciągania
+	public float magnetSpeed = 1f;
+	//odległość na jaką działa magnes
+	public float magnetDistance = 5f;
+	//czas działania magnesu
+	public float magnetTime = 5f;
+
+
+
 	// Use this for initialization
 	void Start()
 	{
 		//Podczas uruchomienia przypisujemy aktualną instancję do statycznego pola instance
 		//!!! Należy uważać, żeby zawsze na scenie był dokładnie jeden GameManager !!!
 		instance = this;
+
+		// sprawdzanie, czy "Coins" jest zapisane w playerPrefs i wczytywanie go
+		LoadCoin();
 
 		//Uruchamiamy spawnowanie przeszkód
 		InitializeGame();
@@ -68,11 +93,13 @@ public class GameManager : MonoBehaviour
 		UpdateOnScreenScore();
 	}
 
-	private void UpdateOnScreenScore()
+    private void UpdateOnScreenScore()
     {
 		score += worldScrollingSpeed;
 		scoreText.text = score.ToString("0");
-    }
+		//zmienianie ilości coinsów
+		coinScoreText.text = coins.ToString();
+	}
 
 	void SpawnObstacle()
 	{
@@ -110,6 +137,74 @@ public class GameManager : MonoBehaviour
 		//Spowoduje to reset gry
 		SceneManager.LoadScene(0);
 	}
+
+
+	private void LoadCoin()
+    {
+		/*
+		 * Sprawdź, czy wartość Coins była już kiedyś zapisana,
+		 * jeżeli tak to odczytaj i zapisz do lokalnej zmiennej coins 
+		 * jeżeli nie to ustaw coins na zero i zapisz do PlayerPrefs
+		 * */
+		if (PlayerPrefs.HasKey("Coins"))
+		{
+			coins = PlayerPrefs.GetInt("Coins");
+		}
+		else
+		{
+			coins = 0;
+			PlayerPrefs.SetInt("Coins", 0);
+		}
+	}
+
+	public void CoinCollected(int value = 1)
+	{
+		//Dodaj wartość zebranego coina do sumy coinów
+		coins += value;
+		/*
+		*Zapisz nową wartość w PlayerPrefs 
+		*(wartość zostanie zapisana na dysku i zapamiętana nawet 
+		*pomiędzy kolejnymi uruchomieniami gry
+		*/
+		PlayerPrefs.SetInt("Coins", coins);
+	}
+
+	public void ImmortalityCollected()
+    {
+		if (isImmortal)
+        {
+			CancelInvoke("CancelImmortality");
+			Invoke("CancelImmortality", immortalTime);
+			return;
+		}
+
+		isImmortal = true;
+		worldScrollingSpeed += immortalSpeedBoost;
+		Invoke("CancelImmortality", immortalTime);
+    }
+
+	private void CancelImmortality()
+    {
+		isImmortal = false;
+		worldScrollingSpeed -= immortalSpeedBoost;
+    }
+
+	public void MagnetCollected()
+    {
+		if(isMagnetActive)
+        {
+            CancelInvoke("CancelMagnet");
+		}
+
+		isMagnetActive = true;
+		Invoke("CancelMagnet", magnetTime);
+
+	}
+
+	private void CancelMagnet()
+    {
+		isMagnetActive = false;
+    }
 
 
 }

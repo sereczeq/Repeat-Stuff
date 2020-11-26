@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     public float startingY;
 
-    public Transform groundCheck;
     public bool grounded;
 
 
@@ -58,13 +57,37 @@ public class PlayerController : MonoBehaviour
     //Metoda zostanie automatycznie wywołana w momencie zderzenia z jakimkolwiek
     //colliderem na którym ustawione jest pole IsTrigger
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         //sprawdzamy czy zderzyliśmy się z przeszkodą
-        if (other.CompareTag("Obstacle"))
+        if (other.CompareTag("Obstacle") && !GameManager.instance.isImmortal)
         {
             //Wywołujemy metodę odpowiedzialną za śmierć gracza
             PlayerDeath();
+        }
+        //W przeciwnym wypadku sprawdź, czy zderzyliśmy się z coinem
+        else if (other.CompareTag("Coin"))
+        {
+            GameManager.instance.CoinCollected();
+
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Immortality"))
+        {
+            GameManager.instance.ImmortalityCollected();
+
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Magnet"))
+        {
+            GameManager.instance.MagnetCollected();
+
+            Destroy(other.gameObject);
         }
     }
     void PlayerDeath()
